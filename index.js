@@ -24,24 +24,29 @@ pasadas.
 • Mostrar una lista de favoritos guardados, y al hacer clic en uno, cargar esa APOD
 automáticamente.*/
 const API_KEY = 'nPGyc47VIhzgfknhAAxk1zmWPbgsvTVHcUOTG8uB';
-const url=`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
+const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
 
-const titulo =  document.getElementById("titulo");
-const imagen =  document.getElementById("imagen");
-const fecha =  document.getElementById("fecha");
-const descripcion =  document.getElementById("descripcion");
+const titulo = document.getElementById("titulo");
+const imagen = document.getElementById("imagen");
+const fecha = document.getElementById("fecha");
+const descripcion = document.getElementById("descripcion");
+const btnFavorito = document.getElementById("btnFavorito");
 
-function obtenerDatos(){
+function obtenerDatos() {
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            console.log(data); 
-            titulo.innerText = data.title;
-            imagen.innerText = data.media_type;
-            fecha.innerText = data.date;
-            descripcion.innerText = data.explanation ;
+            console.log(data);
+            renderizarDatos(data);
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => console.error("El error es:", error));
 }
 
+function renderizarDatos(data) {
+    titulo.innerText = data.title;
+    fecha.innerText = data.date;
+    descripcion.innerText = data.explanation;
+    imagen.src = data.url;
+    imagen.alt = data.title;
+}
 obtenerDatos();
