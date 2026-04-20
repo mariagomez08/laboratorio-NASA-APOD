@@ -30,40 +30,68 @@ const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
 const titulo = document.getElementById("titulo");
 const imagen = document.getElementById("imagen");
 const fecha = document.getElementById("fecha");
-const fechaInput = document.getElementById("fecha-input");
+const fechaInput = document.getElementById("inputFecha");
 const descripcion = document.getElementById("descripcion");
 const btnFavorito = document.getElementById("btnFavorito");
+const btnBuscarPorFecha = document.getElementById("btnBuscar");
 
-fechaInput.addEventListener("change", function(elemento){
+const fechaHoy = new Date().toISOString().split("T")[0];
+//max es un atributo HTML del input de tipo date que restringe la fecha máxima que el usuario puede seleccionar
+fechaInput.max = fechaHoy;
+console.log(fechaHoy)
 
-
-})
+btnBuscarPorFecha.addEventListener("click", function() {
+    titulo.textContent = "CARGANDO TITULO..."
+    imagen.textContent = "CARGANDO IMAGEN..."
+    fecha.textContent = "CARGANDO FECHA..."
+    descripcion.textContent = "CARGANDO DESCRIPCIÓN..."
+    validacionFecha();
+});
 
 function obtenerDatos() {
     fetch(url)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             console.log(data);
+            console.log(data.date + " es de tipo " + typeof(data.date));
             renderizarDatos(data);
         })
         .catch(error => console.error("El error al conectar es:", error));
 }
 
+function filtroPorFecha(fecha){
+    const urlConFecha = `${url}&date=${fecha}`;
+    fetch(urlConFecha)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            renderizarDatos(data);
+        })
+        .catch(error => console.error("El error al filtrar es:", error));
+}
 function renderizarDatos(data) {
     titulo.innerText = data.title;
     fecha.innerText = data.date;
     descripcion.innerText = data.explanation;
-    imagen.src = data.url;
+    imagen.src = data.hdurl || data.url;
     imagen.alt = data.title;
 }
 
-function filtroPorFecha(fecha){
-    const urlConFecha = `${url}&date=${fecha}`;
-    fetch(urlConFecha)
-        .then(response => response.json())
-        .then(data => {
-            renderizarDatos(data);
-        })
-        .catch(error => console.error("El error al filtrar es:", error))
+function validacionFecha(){
+    fechaInput.max = fechaHoy;
+    if (fechaInput.value !== "" && fechaInput.value <= fechaHoy) {
+        filtroPorFecha(fechaInput.value);
+    } else {
+        return alert("Ingresa una fecha valida!");
+    }
 }
 obtenerDatos();
