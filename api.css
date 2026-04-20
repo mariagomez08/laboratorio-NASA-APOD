@@ -3,7 +3,6 @@
 ============================== */
 body {
   background-image: url(./img/fondo01.png);
-  color: #e6edf3;
   font-family: 'Segoe UI', sans-serif;
 }
 
@@ -18,8 +17,8 @@ body {
    CARD
 ============================== */
 .card {
-  background-color: #161b22;
-  border: 1px solid #30363d;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 30px #b8fb00;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -45,7 +44,7 @@ body {
 ============================== */
 #imagen {
   width: 100%;
-  max-height: 500px;
+  height: auto;
   object-fit: cover;
   display: block;
 }
@@ -70,7 +69,7 @@ body {
    DESCRIPCIÓN
 ============================== */
 #descripcion {
-  color: #cdd9e5;
+  color: #000101;
   line-height: 1.7;
   font-size: 1rem;
   text-align: justify;
@@ -80,6 +79,7 @@ body {
    BOTÓN FAVORITOS
 ============================== */
 #btnFavorito {
+  color: #000101;
   border-radius: 8px;
   font-weight: 600;
   padding: 10px 18px;
@@ -87,5 +87,19 @@ body {
 }
 
 #btnFavorito:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
+}
+
+#btnBuscar {
+    background-color: #22396b;
+    padding: 10px 18px;
+
+}
+
+#btnBuscar:hover {
+    transform: scale(1.05);
+    color: #000000;
+    background-color: #f0c040;
+    border: 0px;
+
 }
