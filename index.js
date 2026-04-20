@@ -34,19 +34,23 @@ const fechaInput = document.getElementById("inputFecha");
 const descripcion = document.getElementById("descripcion");
 const btnFavorito = document.getElementById("btnFavorito");
 const btnBuscarPorFecha = document.getElementById("btnBuscar");
+let elementoFavorito = null;
 
 const fechaHoy = new Date().toISOString().split("T")[0];
 //max es un atributo HTML del input de tipo date que restringe la fecha máxima que el usuario puede seleccionar
 fechaInput.max = fechaHoy;
 console.log(fechaHoy)
 
-btnBuscarPorFecha.addEventListener("click", function() {
+btnBuscarPorFecha.addEventListener("click", function () {
     titulo.textContent = "CARGANDO TITULO..."
-    imagen.textContent = "CARGANDO IMAGEN..."
     fecha.textContent = "CARGANDO FECHA..."
     descripcion.textContent = "CARGANDO DESCRIPCIÓN..."
     validacionFecha();
 });
+
+btnFavorito.addEventListener("click", function () {
+    agregarAFavoritos()
+})
 
 function obtenerDatos() {
     fetch(url)
@@ -58,13 +62,14 @@ function obtenerDatos() {
         })
         .then(data => {
             console.log(data);
-            console.log(data.date + " es de tipo " + typeof(data.date));
+            console.log(data.date + " es de tipo " + typeof (data.date));
+            elementoFavorito = data;
             renderizarDatos(data);
         })
         .catch(error => console.error("El error al conectar es:", error));
 }
 
-function filtroPorFecha(fecha){
+function filtroPorFecha(fecha) {
     const urlConFecha = `${url}&date=${fecha}`;
     fetch(urlConFecha)
         .then(response => {
@@ -74,6 +79,7 @@ function filtroPorFecha(fecha){
             return response.json();
         })
         .then(data => {
+            elementoFavorito = data;
             renderizarDatos(data);
         })
         .catch(error => console.error("El error al filtrar es:", error));
@@ -86,12 +92,55 @@ function renderizarDatos(data) {
     imagen.alt = data.title;
 }
 
-function validacionFecha(){
+function validacionFecha() {
     fechaInput.max = fechaHoy;
     if (fechaInput.value !== "" && fechaInput.value <= fechaHoy) {
         filtroPorFecha(fechaInput.value);
     } else {
         return alert("Ingresa una fecha valida!");
+    }
+}
+function agregarAFavoritos() {
+    if (!elementoFavorito) {
+        alert("No hay datos cargados");
+        return;
+    }
+
+    let favoritos = obtenerFavoritos();
+
+    // evitar duplicados usando la fecha como ID
+    const existe = favoritos.some(fav => fav.fecha === elementoFavorito.date);
+
+    if (existe) {
+        alert("Ya está guardado");
+        return;
+    }
+
+    const nuevoFavorito = {
+        titulo: elementoFavorito.title,
+        fecha: elementoFavorito.date,
+        descripcion: elementoFavorito.explanation,
+        imagen: elementoFavorito.hdurl || elementoFavorito.url
+    };
+
+    favoritos.push(nuevoFavorito);
+
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+
+    console.log("Guardado correctamente", favoritos);
+}
+
+function obtenerFavoritos() {
+    try {
+        const datos = localStorage.getItem("favoritos");
+        if(datos){
+            return JSON.parse(datos)
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error leyendo localStorage", error);
+        return [];
     }
 }
 obtenerDatos();
