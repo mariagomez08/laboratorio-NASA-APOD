@@ -29,24 +29,154 @@ const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
 const titulo = document.getElementById("titulo");
 const imagen = document.getElementById("imagen");
 const fecha = document.getElementById("fecha");
+const fechaInput = document.getElementById("inputFecha");
 const descripcion = document.getElementById("descripcion");
 const btnFavorito = document.getElementById("btnFavorito");
+const btnBuscarPorFecha = document.getElementById("btnBuscar");
+let elementoFavorito = null;
+
+const fechaHoy = new Date().toISOString().split("T")[0];
+fechaInput.max = fechaHoy;
+console.log(fechaHoy);
+
+btnBuscarPorFecha.addEventListener("click", function () {
+    titulo.textContent = "CARGANDO TITULO...";
+    fecha.textContent = "CARGANDO FECHA...";
+    descripcion.textContent = "CARGANDO DESCRIPCIÓN...";
+    validacionFecha();
+});
+
+btnFavorito.addEventListener("click", function () {
+    agregarAFavoritos();
+});
 
 function obtenerDatos() {
     fetch(url)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             console.log(data);
+            console.log(data.date + " es de tipo " + typeof (data.date));
+            elementoFavorito = data;
             renderizarDatos(data);
         })
-        .catch(error => console.error("El error es:", error));
+        .catch(error => console.error("El error al conectar es:", error));
+}
+
+function filtroPorFecha(fecha) {
+    const urlConFecha = `${url}&date=${fecha}`;
+    fetch(urlConFecha)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            elementoFavorito = data;
+            renderizarDatos(data);
+        })
+        .catch(error => console.error("El error al filtrar es:", error));
 }
 
 function renderizarDatos(data) {
     titulo.innerText = data.title;
     fecha.innerText = data.date;
     descripcion.innerText = data.explanation;
-    imagen.src = data.url;
-    imagen.alt = data.title;
+    imagen.src = "";
+    console.log(data.media_type);
+    if (data.media_type === "image") {
+        imagen.style.display = "block";
+        imagen.src = data.hdurl
+        imagen.alt = data.title;
+    } else {
+        imagen.style.display = "none";
+        titulo.innerText += " (Video no soportado)";
+    }
 }
+
+function validacionFecha() {
+    fechaInput.max = fechaHoy;
+    if (fechaInput.value !== "" && fechaInput.value <= fechaHoy) {
+        filtroPorFecha(fechaInput.value);
+    } else {
+        return alert("Ingresa una fecha valida!");
+    }
+}
+
+function agregarAFavoritos() {
+    if (!elementoFavorito) {
+        alert("No hay datos cargados");
+        return;
+    }
+
+    let favoritos = obtenerFavoritos();
+
+    const existe = favoritos.some(fav => fav.fecha === elementoFavorito.date);
+
+    if (existe) {
+        alert("Ya está guardado");
+        return;
+    }
+
+    const nuevoFavorito = {
+        titulo: elementoFavorito.title,
+        fecha: elementoFavorito.date,
+        descripcion: elementoFavorito.explanation,
+        imagen: elementoFavorito.hdurl || elementoFavorito.url
+    };
+
+    favoritos.push(nuevoFavorito);
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    console.log("Guardado correctamente", favoritos);
+
+    
+    renderizarFavoritos();
+}
+
+function obtenerFavoritos() {
+    try {
+        const datos = localStorage.getItem("favoritos");
+        if (datos) {
+            return JSON.parse(datos);
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error leyendo localStorage", error);
+        return [];
+    }
+}
+
+function renderizarFavoritos() {
+    const listaFavoritos = document.getElementById("listaFavoritos");
+    const favoritos = obtenerFavoritos();
+
+    listaFavoritos.innerHTML = "";
+
+    if (favoritos.length === 0) {
+        listaFavoritos.innerHTML = "<p style='color:#aaa'>No hay favoritos guardados.</p>";
+        return;
+    }
+
+    favoritos.forEach(fav => {
+        listaFavoritos.innerHTML += `
+          <div class="col-md-4">
+            <div class="card h-100" style="background-color:#0d0d1a; border:1px solid #2e1e4e;">
+              <img src="${fav.imagen}" class="card-img-top" alt="${fav.titulo}" style="max-height:200px; object-fit:cover;">
+              <div class="card-body">
+                <p style="color:#f0c040; font-size:0.8rem;">${fav.fecha}</p>
+                <h6 style="color:#ffffff;">${fav.titulo}</h6>
+              </div>
+            </div>
+          </div>
+        `;
+    });
+}
+
 obtenerDatos();
+renderizarFavoritos();
