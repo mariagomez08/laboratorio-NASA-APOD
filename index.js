@@ -25,12 +25,21 @@ pasadas.
 automáticamente.*/
 const API_KEY = 'nPGyc47VIhzgfknhAAxk1zmWPbgsvTVHcUOTG8uB';
 const url=`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
+
+const titulo =  document.getElementById("titulo");
+const imagen =  document.getElementById("imagen");
+const fecha =  document.getElementById("fecha");
+const descripcion =  document.getElementById("descripcion");
+
 function obtenerDatos(){
     fetch(url)
         .then(response => response.json())
         .then(data => {
             console.log(data); 
-            document.getElementById("apod-titulo").innerText = data.title;
+            titulo.innerText = data.title;
+            imagen.innerText = data.media_type;
+            fecha.innerText = data.date;
+            descripcion.innerText = data.explanation ;
         })
         .catch(error => console.error("Error:", error));
 }
