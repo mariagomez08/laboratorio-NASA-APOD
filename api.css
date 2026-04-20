@@ -1,0 +1,91 @@
+/* ==============================
+   GENERAL
+============================== */
+body {
+  background-image: url(https://www.freepik.es/vector-gratis/fondo-galaxia-realista_14960493.htm#fromView=search&page=1&position=1&uuid=d61046ac-a3fe-4b3d-8b28-9476a9c00999&query=espacio)
+  color: #e6edf3;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ==============================
+   CONTENEDOR
+============================== */
+.container {
+  max-width: 860px;
+}
+
+/* ==============================
+   CARD
+============================== */
+.card {
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ==============================
+   HEADER
+============================== */
+.card-header {
+  background-color: #1f2937;
+  border-bottom: 1px solid #30363d;
+  padding: 1.2rem;
+}
+
+#titulo {
+  color: #f0c040;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ==============================
+   IMAGEN
+============================== */
+#imagen {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ==============================
+   CUERPO
+============================== */
+.card-body {
+  padding: 1.8rem;
+}
+
+/* ==============================
+   FECHA
+============================== */
+#fecha {
+  color: #8b949e;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+/* ==============================
+   DESCRIPCIÓN
+============================== */
+#descripcion {
+  color: #cdd9e5;
+  line-height: 1.7;
+  font-size: 1rem;
+  text-align: justify;
+}
+
+/* ==============================
+   BOTÓN FAVORITOS
+============================== */
+#btnFavorito {
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 10px 18px;
+  transition: all 0.3s ease;
+}
+
+#btnFavorito:hover {
+  transform: scale(1.05);
+}
