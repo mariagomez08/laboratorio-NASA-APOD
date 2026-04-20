@@ -6,7 +6,21 @@ La NASA APOD (Astronomy Picture of the Day) es un programa que publica diariamen
 imagen o video astronómico acompañado de una breve explicación científica. Estas
 imágenes incluyen fotos de galaxias, nebulosas, planetas y eventos cósmicos, capturadas
 por telescopios como el Hubble.
-El aplicativo cuenta conlas siguientes funcionalidades:
-1. Obtener y mostrar la "Foto del Día" (APOD)
-2. Selector de fechas
-3. Sistema de Favoritos
+
+## Funcionalidades
+- Visualización de la imagen del día
+- Consulta de APOD por fecha
+- Guardado de favoritos en `localStorage`
+- 
+## Tecnologías
+- HTML5
+- CSS3 (Bootstrap 5)
+- JavaScript (Vanilla)
+- API REST (NASA APOD)
+- LocalStorage
+- 
+## 👥 Equipo
+- [Joan Triana](https://github.com/joantriana7-afk)
+- [María Gómez](https://github.com/mariagomez08)
+
+
