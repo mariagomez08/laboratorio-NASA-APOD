@@ -26,7 +26,6 @@ automáticamente.*/
 const API_KEY = 'nPGyc47VIhzgfknhAAxk1zmWPbgsvTVHcUOTG8uB';
 const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
 
-
 const titulo = document.getElementById("titulo");
 const imagen = document.getElementById("imagen");
 const fecha = document.getElementById("fecha");
@@ -84,21 +83,6 @@ function filtroPorFecha(fecha) {
         .catch(error => console.error("El error al filtrar es:", error));
 }
 
-function filtroPorFecha(fecha) {
-    const urlConFecha = `${url}&date=${fecha}`;
-    fetch(urlConFecha)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            elementoFavorito = data;
-            renderizarDatos(data);
-        })
-        .catch(error => console.error("El error al filtrar es:", error));
-}
 function renderizarDatos(data) {
     titulo.innerText = data.title;
     fecha.innerText = data.date;
