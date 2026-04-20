@@ -88,8 +88,16 @@ function renderizarDatos(data) {
     titulo.innerText = data.title;
     fecha.innerText = data.date;
     descripcion.innerText = data.explanation;
-    imagen.src = data.hdurl || data.url;
-    imagen.alt = data.title;
+    imagen.src = ""; 
+    console.log(data.media_type)
+    if (data.media_type === "image") {
+        imagen.style.display = "block";
+        imagen.src = data.hdurl || data.url;
+        imagen.alt = data.title;
+    } else {
+        imagen.style.display = "none";
+        titulo.innerText += " (Video no soportado)";
+    }
 }
 
 function validacionFecha() {
