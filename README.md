@@ -1,4 +1,4 @@
-# LABORATORIO NASA APOD
+# NASA APOD EXPLORER
 Aplicación web interactiva que muestra la "Astronomy Picture of the Day"
 (APOD) de la NASA, permitiendo explorar imágenes astronómicas históricas y guardar las
 favoritas en el navegador.
@@ -11,7 +11,6 @@ por telescopios como el Hubble.
 - Visualización de la imagen del día
 - Consulta de APOD por fecha
 - Guardado de favoritos en `localStorage`
-- 
 ## Tecnologías
 - HTML5
 - CSS3 (Bootstrap 5)
